@@ -87,5 +87,6 @@
 
 	<!-- _________________________________ Custom _______________________________ -->
 
+	<!-- <define name="ROOMEDITOR" /> -->
 	<!--Place custom nodes like icons here-->
 </project>

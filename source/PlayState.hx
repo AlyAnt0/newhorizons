@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxState;
 
 import rooms.TownRoom;
+import editor.RoomEditor;
 
 class PlayState extends FlxState {
     // TODO(mvh): Eventually handle things like the play/create penguin screen here.
@@ -17,7 +18,11 @@ class PlayState extends FlxState {
         FlxG.mouse.useSystemCursor = true; // Use native system cursor instead of Haxeflixel's
 
         // Change the active room/scene.
+        #if ROOMEDITOR
+        FlxG.switchState(RoomEditor.new);
+        #else
         FlxG.switchState(TownRoom.new);
+        #end
     }
 
     ///////// UPDATE /////////

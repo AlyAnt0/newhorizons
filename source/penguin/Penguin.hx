@@ -19,6 +19,9 @@ class Penguin {
     // TODO(mvh): Penguin clothing state.  Should we use a separate class for this so we just have a simple API for it here,
     //            rather than having to also deal with all the clothing stuff here.
 
+    public var x:Float = 0;
+    public var y:Float = 0;
+
     // Action state.
     private var currentAction: PenguinAction;
     private var actionJustChanged: Bool;
@@ -41,8 +44,14 @@ class Penguin {
     public function new(X: Float = 0, Y: Float = 0) {
         if (sprites == null) sprites = new Array<FlxSprite>();
 
-        loadPenguinSprite(X, Y);
+        this.x = X;
+        this.y = Y;
+
+        loadPenguinSprite(x, y);
         loadPenguinName();
+
+        updatePosition();
+        trace('created penguin!');
 
         setIdle(North);
     }
@@ -57,6 +66,14 @@ class Penguin {
             case Waving(waveTimer): updateWaving(elapsed, waveTimer);
         }
         actionJustChanged = false;
+
+        updatePosition();
+    }
+
+    public function updatePosition():Void
+    {
+        penguinSprite.x = this.x;
+        penguinSprite.y = this.y;
 
         var textWidth: Float = penguinName.width;
         penguinName.x = penguinSprite.x - (textWidth / 2) + (penguinSprite.width / 2);
@@ -83,6 +100,7 @@ class Penguin {
     }
     public function setMoving(goalX: Float, goalY: Float) {
         currentAction = Moving(FlxPoint.get(goalX, goalY));
+        trace(goalX, goalY);
         actionJustChanged = true;
     }
     public function setSitting(direction: CardinalDirection) {
@@ -125,8 +143,8 @@ class Penguin {
         }
 
         direction.normalize();
-        penguinSprite.x += direction.x * speed * elapsed;
-        penguinSprite.y += direction.y * speed * elapsed;
+        x += direction.x * speed * elapsed;
+        y += direction.y * speed * elapsed;
 
         // Determine walking animation and update currentDirection
         switch (angleToDirection(moveAngle)) {

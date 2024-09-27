@@ -1,11 +1,18 @@
 package;
 
+import flixel.FlxG;
 import haxe.Json;
 import haxe.ds.StringMap;
 import flixel.FlxSprite;
 import openfl.utils.Assets;
 
-class RoomAsset {
+using flixel.util.FlxArrayUtil;
+
+/**
+ * @author Mart
+ */
+
+class AssetData {
     public var name: String;
     public var sprite: FlxSprite;
     public function new(assetName: String, assetSprite: FlxSprite) {
@@ -14,15 +21,15 @@ class RoomAsset {
     }
 }
 
-class RoomAssetLoader {
-    private var assets: Array<RoomAsset>;
+class AssetLoader {
+    private var assets: Array<AssetData>;
 
     public function new(): Void {
-        assets = new Array<RoomAsset>();
+        assets = new Array<AssetData>();
     }
 
     // Get an array of the assets.
-    public function getAssets(): Array<RoomAsset> {
+    public function getAssets(): Array<AssetData> {
         return assets;
     }
 
@@ -57,9 +64,23 @@ class RoomAssetLoader {
 
             if (asset.angle != null) sprite.angle = asset.angle;
 
-            assets.push(new RoomAsset(asset.name, sprite));
+            assets.push(new AssetData(asset.name, sprite));
         }
 
         return true;
+    }
+
+    public function clear():Void
+    {
+        // Clear the assets data first, after it, will clear the assets data.
+        for (asset in assets)
+        {
+            if (asset.name != null)
+            {
+                if (FlxG.state != null)
+                    FlxG.state.remove(getSprite(asset.name));
+            }
+            assets.clearArray(true);
+        }
     }
 }

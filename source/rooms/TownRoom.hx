@@ -10,10 +10,10 @@ import penguin.Penguin;
 import penguin.PenguinControllable;
 
 class TownRoom extends FlxState {
-    var backgroundAssets: RoomAssetLoader;
-    var foregroundAssets: RoomAssetLoader;
-    var roomAssets: RoomAssetLoader;
-    var userInterfaceAssets: RoomAssetLoader;
+    var backgroundAssets: AssetLoader;
+    var foregroundAssets: AssetLoader;
+    var roomAssets: AssetLoader;
+    var userInterfaceAssets: AssetLoader;
 
     var penguin: Penguin;
 
@@ -69,19 +69,19 @@ class TownRoom extends FlxState {
     }
 
     private function loadBackgroundAssets(): Void {
-        backgroundAssets = new RoomAssetLoader();
+        backgroundAssets = new AssetLoader();
         backgroundAssets.loadSprites("assets/images/rooms/town/town_background.json");
         for (asset in backgroundAssets.getAssets()) add(asset.sprite);
     }
 
     private function loadRoomAssets(): Void {
-        roomAssets = new RoomAssetLoader();
+        roomAssets = new AssetLoader();
         roomAssets.loadSprites("assets/images/rooms/town/town_room.json");
         for (asset in roomAssets.getAssets()) add(asset.sprite);
     }
 
     private function loadPlayer(): Void {
-        penguin = new PenguinControllable(100, 100);
+        penguin = new PenguinControllable(581, 516);
         for (sprite in penguin.getSprites()) add(sprite);
     }
 
@@ -97,13 +97,13 @@ class TownRoom extends FlxState {
     }
 
     private function loadForegroundAssets(): Void {
-        foregroundAssets = new RoomAssetLoader();
+        foregroundAssets = new AssetLoader();
         foregroundAssets.loadSprites("assets/images/rooms/town/town_foreground.json");
         for (asset in foregroundAssets.getAssets()) add(asset.sprite);
     }
 
     private function loadUserInterfaceAssets(): Void {
-        userInterfaceAssets = new RoomAssetLoader();
+        userInterfaceAssets = new AssetLoader();
         userInterfaceAssets.loadSprites("assets/images/userInterface.json");
         for (asset in userInterfaceAssets.getAssets()) add(asset.sprite);
     }
