@@ -1,6 +1,7 @@
 package penguin;
 
 import flixel.FlxG;
+import flixel.FlxBasic;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 
@@ -15,14 +16,18 @@ class PenguinControllable extends Penguin {
     private var usingCachedMousePos: Bool;
 
     // Constructor.
-    override public function new(X: Float, Y: Float) {
+    override public function new(X: Float, Y: Float,
+                                 flxStateAddCallback: FlxBasic -> FlxBasic,
+                                 flxGroupAddCallback: FlxBasic -> FlxBasic = null) {
         if (sprites == null) sprites = new Array<FlxSprite>();
+        if (flxStateAdd == null) flxStateAdd = flxStateAddCallback;
+        if (flxGroupAdd == null) flxGroupAdd = flxGroupAddCallback;
 
         loadTargetSprite(X, Y);
         loadCircleSprite(X, Y);
         loadClickCollisionSprite(X, Y);
 
-        super(X, Y);
+        super(X, Y, flxStateAddCallback, flxGroupAddCallback);
 
     }
 

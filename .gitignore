@@ -1,1 +1,8 @@
+# HaxeFlixel output
 export/*
+
+# Gameserver binary
+gameserver/gameserver
+# Gameserver examples python stuff
+gameserver/example/venv/
+gameserver/example/__pycache__/

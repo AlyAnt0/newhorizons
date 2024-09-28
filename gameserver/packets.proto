@@ -1,0 +1,104 @@
+syntax="proto3";
+
+package packets;
+
+option go_package = "gameserver/packets";
+
+// Useful types
+message Position {
+    float x = 1;
+    float y = 2;
+}
+enum Direction {
+    NORTH      = 0;
+    NORTH_EAST = 1;
+    EAST       = 2;
+    SOUTH_EAST = 3;
+    SOUTH      = 4;
+    SOUTH_WEST = 5;
+    WEST       = 6;
+    NORTH_WEST = 7;
+}
+enum RoomID {
+    NONE = 0;
+    TOWN = 1;
+}
+
+// Logging in on the server
+// User does not need to know their own user id as the server manages that for them
+message Login { // Sent to server when you log in
+    string name = 1;
+}
+
+// Joining rooms
+message JoinRoom { // Sent to server when you join a room
+    RoomID   roomID   = 1;
+    Position position = 2;
+}
+message JoinedRoom { // Sent by server when someone joins your room
+    string   userName = 1;
+    uint64   userID   = 2;
+    RoomID   roomID   = 3;
+    Position position = 4;
+}
+// Sent automatically when you move to another room or exit the game.
+// A user can only be in one room at a time, so it is just sent to everyone who is currently in that room.
+message LeftRoom { // Sent by server when someone leaves your room
+    uint64 userID = 1;
+    RoomID roomID = 2;
+}
+
+// Chat messages
+message SendMessage { // Sent to server when you send a chat message
+    string content = 1;
+}
+message ReceivedMessage {  // Sent by server when someone sends a message in your room
+    uint64 userID  = 1;
+    string content = 2;
+    RoomID roomID  = 3;
+}
+
+// Performing actions in the room
+enum ActionType {
+    IDLE    = 0;
+    DANCING = 1;
+    SITTING = 2;
+    MOVING  = 3;
+}
+message BeginAction { // Sent to server when you begin an action
+    ActionType actionType = 1;
+    oneof ActionData {
+        Position   position  = 2; // Used for the move action
+        Direction  direction = 3; // Used for the sitting and idle actions
+    }
+}
+message ReceivedAction { // Sent by server when someone in the room begins an action
+    uint64      userID = 1;
+    BeginAction action = 2; // Reusing it so I don't have to write it twice
+    RoomID      roomID = 3;
+}
+
+// Messages
+enum MessageType {
+    LOGIN            = 0;
+    JOIN_ROOM        = 1;
+    JOINED_ROOM      = 2;
+    LEFT_ROOM        = 3;
+    SEND_MESSAGE     = 4;
+    RECEIVED_MESSAGE = 5;
+    BEGIN_ACTION     = 6;
+    RECEIVED_ACTION  = 7;
+}
+message Message {
+    MessageType messageType = 1;
+    oneof MessageData {
+        Login           login           = 2;
+        JoinRoom        joinRoom        = 3;
+        JoinedRoom      joinedRoom      = 4;
+        LeftRoom        leftRoom        = 5;
+        SendMessage     sendMessage     = 6;
+        ReceivedMessage receivedMessage = 7;
+        BeginAction     beginAction     = 8; 
+        ReceivedAction  receivedAction  = 9;
+    }
+}

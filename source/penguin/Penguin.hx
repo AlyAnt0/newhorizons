@@ -1,6 +1,7 @@
 package penguin;
 
 import flixel.FlxG;
+import flixel.FlxBasic;
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -39,10 +40,17 @@ class Penguin {
     private final fadeOutDistance: Float = 105;
     private final fadeMultiplier: Float = 3;
 
+    // Render stuff.
+    var flxStateAdd: FlxBasic -> FlxBasic;
+    var flxGroupAdd: FlxBasic -> FlxBasic;
 
     // Constructor
-    public function new(X: Float = 0, Y: Float = 0) {
+    public function new(X: Float = 0, Y: Float = 0,
+                        flxStateAddCallback: FlxBasic -> FlxBasic,
+                        flxGroupAddCallback: FlxBasic -> FlxBasic = null) {
         if (sprites == null) sprites = new Array<FlxSprite>();
+        if (flxStateAdd == null) flxStateAdd = flxStateAddCallback;
+        if (flxGroupAdd == null) flxGroupAdd = flxGroupAddCallback;
 
         this.x = X;
         this.y = Y;
@@ -242,10 +250,12 @@ class Penguin {
         penguinSprite.screenCenter();
 
         addSprite(penguinSprite);
+        if (flxGroupAdd != null) flxGroupAdd(penguinSprite);
     }
 
     private function addSprite(sprite: FlxSprite): Void {
         sprites.push(sprite);
+        if (flxStateAdd != null) flxStateAdd(sprite);
     }
 
     private function loadPenguinName() {

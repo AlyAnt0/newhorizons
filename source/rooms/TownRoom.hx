@@ -27,15 +27,16 @@ class TownRoom extends FlxState {
         FlxG.autoPause = false; // Disable automatic pausing when the window loses focus
         FlxG.mouse.useSystemCursor = true; // Use native system cursor instead of Haxeflixel's
 
-        loadBackgroundAssets();
-        loadRoomAssets();
-        loadPlayer();
-        setupRenderGroup();
-        loadForegroundAssets();
+        renderGroup = new FlxGroup();
 
+        backgroundAssets = new RoomAssetLoader("assets/images/rooms/town/town_background.json", add);
+        roomAssets = new RoomAssetLoader("assets/images/rooms/town/town_room.json", add, renderGroup.add);
+        penguin = new PenguinControllable(581, 516, add, renderGroup.add);
+        foregroundAssets = new RoomAssetLoader("assets/images/rooms/town/town_foreground.json", add);
         add(penguin.getPenguinName());
+        userInterfaceAssets = new RoomAssetLoader("assets/images/userInterface.json", add);
 
-        loadUserInterfaceAssets();
+        add(renderGroup);
     }
 
     ///////// UPDATE /////////
@@ -66,45 +67,5 @@ class TownRoom extends FlxState {
         if (posA < posB) return -1;
         if (posA > posB) return 1;
         return 0;
-    }
-
-    private function loadBackgroundAssets(): Void {
-        backgroundAssets = new AssetLoader();
-        backgroundAssets.loadSprites("assets/images/rooms/town/town_background.json");
-        for (asset in backgroundAssets.getAssets()) add(asset.sprite);
-    }
-
-    private function loadRoomAssets(): Void {
-        roomAssets = new AssetLoader();
-        roomAssets.loadSprites("assets/images/rooms/town/town_room.json");
-        for (asset in roomAssets.getAssets()) add(asset.sprite);
-    }
-
-    private function loadPlayer(): Void {
-        penguin = new PenguinControllable(581, 516);
-        for (sprite in penguin.getSprites()) add(sprite);
-    }
-
-    private function setupRenderGroup(): Void {
-        renderGroup = new FlxGroup();
-
-        // Room
-        for (asset in roomAssets.getAssets()) renderGroup.add(asset.sprite);
-        // Penguin
-        renderGroup.add(penguin.getPenguinSprite());
-
-        add(renderGroup);
-    }
-
-    private function loadForegroundAssets(): Void {
-        foregroundAssets = new AssetLoader();
-        foregroundAssets.loadSprites("assets/images/rooms/town/town_foreground.json");
-        for (asset in foregroundAssets.getAssets()) add(asset.sprite);
-    }
-
-    private function loadUserInterfaceAssets(): Void {
-        userInterfaceAssets = new AssetLoader();
-        userInterfaceAssets.loadSprites("assets/images/userInterface.json");
-        for (asset in userInterfaceAssets.getAssets()) add(asset.sprite);
     }
 }

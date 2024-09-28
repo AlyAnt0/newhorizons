@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import haxe.Json;
 import haxe.ds.StringMap;
+import flixel.FlxBasic;
 import flixel.FlxSprite;
 import openfl.utils.Assets;
 
@@ -24,8 +25,16 @@ class AssetData {
 class AssetLoader {
     private var assets: Array<AssetData>;
 
-    public function new(): Void {
-        assets = new Array<AssetData>();
+    private var flxStateAdd: FlxBasic -> FlxBasic;
+    private var flxGroupAdd: FlxBasic -> FlxBasic;
+
+    public function new(defaultPath: String = null,
+                        flxStateAddCallback: FlxBasic -> FlxBasic = null,
+                        flxGroupAddCallback: FlxBasic -> FlxBasic = null): Void {
+        assets = new Array<RoomAsset>();
+        flxStateAdd = flxStateAddCallback;
+        flxGroupAdd = flxGroupAddCallback;
+        if (defaultPath != null) loadSprites(defaultPath);
     }
 
     // Get an array of the assets.
@@ -64,7 +73,10 @@ class AssetLoader {
 
             if (asset.angle != null) sprite.angle = asset.angle;
 
-            assets.push(new AssetData(asset.name, sprite));
+            assets.push(new RoomAsset(asset.name, sprite));
+
+            if (flxStateAdd != null) flxStateAdd(sprite);
+            if (flxGroupAdd != null) flxGroupAdd(sprite);
         }
 
         return true;
