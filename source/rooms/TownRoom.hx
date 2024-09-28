@@ -29,12 +29,12 @@ class TownRoom extends FlxState {
 
         renderGroup = new FlxGroup();
 
-        backgroundAssets = new RoomAssetLoader("assets/images/rooms/town/town_background.json", add);
-        roomAssets = new RoomAssetLoader("assets/images/rooms/town/town_room.json", add, renderGroup.add);
+        backgroundAssets = new AssetLoader("assets/images/rooms/town/town_background.json", add);
+        roomAssets = new AssetLoader("assets/images/rooms/town/town_room.json", add, renderGroup.add);
         penguin = new PenguinControllable(581, 516, add, renderGroup.add);
-        foregroundAssets = new RoomAssetLoader("assets/images/rooms/town/town_foreground.json", add);
+        foregroundAssets = new AssetLoader("assets/images/rooms/town/town_foreground.json", add);
         add(penguin.getPenguinName());
-        userInterfaceAssets = new RoomAssetLoader("assets/images/userInterface.json", add);
+        userInterfaceAssets = new AssetLoader("assets/images/userInterface.json", add);
 
         add(renderGroup);
     }

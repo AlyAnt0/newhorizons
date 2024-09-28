@@ -31,7 +31,7 @@ class AssetLoader {
     public function new(defaultPath: String = null,
                         flxStateAddCallback: FlxBasic -> FlxBasic = null,
                         flxGroupAddCallback: FlxBasic -> FlxBasic = null): Void {
-        assets = new Array<RoomAsset>();
+        assets = new Array<AssetData>();
         flxStateAdd = flxStateAddCallback;
         flxGroupAdd = flxGroupAddCallback;
         if (defaultPath != null) loadSprites(defaultPath);
@@ -73,7 +73,7 @@ class AssetLoader {
 
             if (asset.angle != null) sprite.angle = asset.angle;
 
-            assets.push(new RoomAsset(asset.name, sprite));
+            assets.push(new AssetData(asset.name, sprite));
 
             if (flxStateAdd != null) flxStateAdd(sprite);
             if (flxGroupAdd != null) flxGroupAdd(sprite);
